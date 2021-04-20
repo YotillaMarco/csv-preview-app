@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+
+<h:head>
+    <title>Workshop</title>
+
+    <h:outputStylesheet library="vendor" name="primeflex/primeflex.min.css"/>
+    <h:outputStylesheet library="css" name="styles.css"/>
+</h:head>
+
+<h:body>
+    <p:growl id="growl" showDetail="true"/>
+
+    <div class="p-d-flex">
+        <div class="p-mr-2">
+            <h:form>
+                <p:card>
+                    <f:facet name="title">
+                        Person
+                    </f:facet>
+
+                    <p:outputPanel layout="block" id="personFormPanel">
+
+                        <div class="p-field">
+                            <p:outputLabel for="firstNameInput" value="Firstname:"/>
+                            <p:inputText id="firstNameInput" value="#{personModel.firstName}"/>
+                        </div>
+
+                        <div class="p-field">
+                            <p:outputLabel for="middleNameInput" value="Middle name:"/>
+                            <p:inputText id="middleNameInput" value="#{personModel.middleName}"/>
+                        </div>
+
+                        <div class="p-field">
+                            <p:outputLabel for="lastName" value="Last name:"/>
+
+                            <p:inputText id="lastName" value="#{personModel.lastName}"
+                                         required="true"
+                                         requiredMessage="Surname is required">
+                                <f:validateLength minimum="2"/>
+                            </p:inputText>
+                            <p:message for="lastName" />
+                        </div>
+                    </p:outputPanel>
+
+                    <p:commandButton value="All"
+                                     id="btnAll"
+                                     process="@all"
+                                     update="growl personFormPanel resultOutputPanel"
+                                     action="#{personAction.save}" styleClass="p-mr-2"/>
+
+                    <p:commandButton value="Form"
+                                     id="btnForm"
+                                     process="@form"
+                                     update="growl personFormPanel resultOutputPanel"
+                                     action="#{personAction.save}"
+                                     styleClass="p-mr-2"/>
+
+                    <p:commandButton value="This" id="btnThis"
+                                     process="@this"
+                                     update="growl personFormPanel resultOutputPanel"
+                                     action="#{personAction.save}"
+                                     styleClass="p-mr-2"/>
+
+                    <p:commandButton value="None" id="btnNone"
+                                     process="@none"
+                                     update="growl personFormPanel resultOutputPanel"
+                                     action="#{personAction.save}"
+                                     styleClass="p-mr-2" resetValues="true"/>
+
+                    <p:commandButton value="Parent" id="btnParent"
+                                     process="@parent"
+                                     update="growl personFormPanel resultOutputPanel"
+                                     action="#{personAction.save}"
+                                     styleClass="p-mr-2"/>
+
+                    <p:commandButton value="This Surname"
+                                     id="btnSurname"
+                                     process="@this,lastName"
+                                     update="growl personFormPanel resultOutputPanel"
+                                     partialSubmit="true"
+                                     actionListener="#{personAction.saveListener}"
+                                     action="#{personAction.save}"/>
+
+                    <p:outputPanel id="resultOutputPanel">
+                        <ul>
+                            <li>First name: <h:outputText value="#{personModel.firstName}"/></li>
+                            <li>Middle name: <h:outputText value="#{personModel.middleName}"/></li>
+                            <li>Last name: <h:outputText value="#{personModel.lastName}"/></li>
+                        </ul>
+                    </p:outputPanel>
+                </p:card>
+            </h:form>
+        </div>
+        <div class="p-mr-2">
+            <p:card>
+                <f:facet name="title">
+                    Mirror
+                </f:facet>
+                <h:form>
+                    <div class="p-field">
+                        <p:inputText id="mirrorInput"
+                                     widgetVar="mirrorInput"
+                                     value="#{mirrorModel.text}">
+                            <p:ajax event="keyup"
+                                    update="mirrorOutputText"
+                                    listener="#{mirrorAction.onKeyUpEvent}"/>
+                        </p:inputText>
+                    </div>
+                    <h:outputText id="mirrorOutputText" value="#{mirrorModel.text}"/>
+                </h:form>
+            </p:card>
+        </div>
+    </div>
+
+</h:body>
+</html>
